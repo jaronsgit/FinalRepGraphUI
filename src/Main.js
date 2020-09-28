@@ -1,26 +1,18 @@
-import React from "react";
-import { Card, Grid, Paper } from "@material-ui/core";
+import React, { useContext } from "react";
+import { Card, Grid, Paper, Typography } from "@material-ui/core";
 import { dmrsData } from "./store";
-import InputArea from "./Components/Main/InputArea";
 
 import { AppContext } from "./Store/AppContextProvider.js";
 import SentenceList from "./Components/Main/SentenceList";
+import Header from "./Components/Layouts/Header";
+import AnalysisAccordion from "./Components/Main/AnalysisAccordion";
 
 const testingEndpoint = "http://192.168.0.135:8080";
 
-export default class Main extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      sentences: [],
-      sentence: {},
-      graphData: {},
-      selectingSubset: false
-    };
-    this.layoutGraph.bind(this);
-  }
+export default function Main() {
+  const { state, dispatch } = useContext(AppContext);
 
-  layoutGraph = (sentence) => {
+  const layoutGraph = (sentence) => {
     let graph = sentence;
 
     //Determine span lengths of each node
@@ -204,16 +196,21 @@ export default class Main extends React.Component {
     return finalGraph;
   };
 
-  render() {
-    const { sentences, sentence, graphData } = this.state; //destructure internal state
-
-    console.log("app render: ", graphData);
-    return (
-      <Card>
-        <Paper elevation={1}>
-          <SentenceList />
-        </Paper>
-      </Card>
-    );
-  }
+  return (
+    <React.Fragment>
+      <Header />
+      <Grid container spacing={2} direction="column">
+        <Grid item xs={12}>
+          <Paper elevation={1}>
+            <SentenceList />
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper elevation={1}>
+            <AnalysisAccordion />
+          </Paper>
+        </Grid>
+      </Grid>
+    </React.Fragment>
+  );
 }
